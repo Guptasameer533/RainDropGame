@@ -5,7 +5,7 @@ interface RainGridProps {
   width: number;
   height: number;
   isPlaying: boolean;
-  speed: number; // New prop for speed control
+  speed: number; // New prop for speed
 }
 
 const RainGrid: React.FC<RainGridProps> = ({ width, height, isPlaying, speed }) => {
@@ -40,7 +40,7 @@ const RainGrid: React.FC<RainGridProps> = ({ width, height, isPlaying, speed }) 
 
     const interval = setInterval(() => {
       setGrid((prevGrid) => {
-        const newGrid = prevGrid.map((row) => [...row]);
+        const newGrid = prevGrid.map(row => [...row]);
 
         // Move existing drops down
         for (let y = height - 1; y >= 0; y--) {
@@ -57,11 +57,11 @@ const RainGrid: React.FC<RainGridProps> = ({ width, height, isPlaying, speed }) 
         for (let x = 0; x < width; x++) {
           if (Math.random() < 0.05) { // Very low probability for sparse appearance
             for (let i = 0; i < blockLength; i++) {
-              const opacity = i / blockLength; // Gradual fade-out effect
+              const opacity = (i / blockLength); // Gradual fade-out effect
               if (i < height) {
                 newGrid[i][x] = {
                   color: currentColor,
-                  opacity,
+                  opacity
                 };
               }
             }
@@ -81,7 +81,7 @@ const RainGrid: React.FC<RainGridProps> = ({ width, height, isPlaying, speed }) 
         }
         return newCounter;
       });
-    }, speed); // Use the speed prop for interval
+    }, speed); // Use the speed prop to control interval
 
     return () => clearInterval(interval);
   }, [width, height, isPlaying, currentColor, speed]);
