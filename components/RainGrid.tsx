@@ -11,7 +11,7 @@ interface RainGridProps {
 const RainGrid: React.FC<RainGridProps> = ({ width, height, isPlaying, speed }) => {
   const [grid, setGrid] = useState<Array<Array<{ color: string; opacity: number } | null>>>([]);
   const [currentColor, setCurrentColor] = useState('#ff00ff');
-  const [colorChangeCounter, setColorChangeCounter] = useState(0);
+  const [, setColorChangeCounter] = useState(0);
 
   const blockLength = 6;
 
