@@ -1,30 +1,14 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 
 interface RainDropProps {
   color: string;
-  speed: number;
+  opacity: number;
 }
 
-const RainDrop: React.FC<RainDropProps> = ({ color, speed }) => {
-  const [opacity, setOpacity] = useState(0);
-
-  useEffect(() => {
-    const animationInterval = setInterval(() => {
-      setOpacity((prevOpacity) => {
-        if (prevOpacity >= 1) {
-          clearInterval(animationInterval);
-          return 0;
-        }
-        return prevOpacity + 0.1;
-      });
-    }, speed);
-
-    return () => clearInterval(animationInterval);
-  }, [speed]);
-
+const RainDrop: React.FC<RainDropProps> = ({ color, opacity }) => {
   return (
     <div
-      className="rain-drop"
+      className="w-full h-full"
       style={{
         backgroundColor: color,
         opacity,
