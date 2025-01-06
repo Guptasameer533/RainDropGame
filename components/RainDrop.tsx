@@ -8,15 +8,14 @@ interface RainDropProps {
 const RainDrop: React.FC<RainDropProps> = ({ color, opacity }) => {
   return (
     <div
-      className="w-full h-full"
       style={{
+        width: '100%',
+        height: '100%',
         backgroundColor: color,
         opacity,
-        boxShadow: `0 0 10px ${color}`,
       }}
-    />
+    ></div>
   );
 };
 
 export default RainDrop;
-

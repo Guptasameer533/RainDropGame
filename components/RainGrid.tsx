@@ -5,14 +5,12 @@ interface RainGridProps {
   width: number;
   height: number;
   isPlaying: boolean;
-  speed: number; // New prop for speed
+  speed: number;
 }
 
 const RainGrid: React.FC<RainGridProps> = ({ width, height, isPlaying, speed }) => {
   const [grid, setGrid] = useState<Array<Array<{ color: string; opacity: number } | null>>>([]);
   const [currentColor, setCurrentColor] = useState('#ff00ff');
-  const [, setColorChangeCounter] = useState(0);
-
   const blockLength = 6;
 
   const getRandomColor = () => {
@@ -25,22 +23,20 @@ const RainGrid: React.FC<RainGridProps> = ({ width, height, isPlaying, speed }) 
   };
 
   const initializeGrid = useCallback(() => {
-    const newGrid = Array(height).fill(null).map(() => 
-      Array(width).fill(null)
-    );
+    const newGrid = Array(height).fill(null).map(() => Array(width).fill(null));
     setGrid(newGrid);
   }, [width, height]);
 
   useEffect(() => {
     initializeGrid();
-  }, [width, height, initializeGrid]);
+  }, [initializeGrid]);
 
   useEffect(() => {
     if (!isPlaying) return;
 
     const interval = setInterval(() => {
       setGrid((prevGrid) => {
-        const newGrid = prevGrid.map(row => [...row]);
+        const newGrid = prevGrid.map((row) => [...row]);
 
         // Move existing drops down
         for (let y = height - 1; y >= 0; y--) {
@@ -53,56 +49,61 @@ const RainGrid: React.FC<RainGridProps> = ({ width, height, isPlaying, speed }) 
           }
         }
 
-        // Add new drops at the top with controlled density
+        // Add new drops at the top
         for (let x = 0; x < width; x++) {
-          if (Math.random() < 0.05) { // Very low probability for sparse appearance
+          if (Math.random() < 0.05) {
             for (let i = 0; i < blockLength; i++) {
-              const opacity = (i / blockLength); // Gradual fade-out effect
               if (i < height) {
                 newGrid[i][x] = {
                   color: currentColor,
-                  opacity
+                  opacity: (blockLength - i) / blockLength, // Gradual fade-out
                 };
               }
             }
-          } else {
-            newGrid[0][x] = null;
           }
         }
 
         return newGrid;
       });
 
-      setColorChangeCounter((prevCounter) => {
-        const newCounter = prevCounter + 1;
-        if (newCounter >= 10) {
-          setCurrentColor(getRandomColor());
-          return 0;
-        }
-        return newCounter;
-      });
-    }, speed); // Use the speed prop to control interval
+      setCurrentColor((prevColor) =>
+        Math.random() < 0.1 ? getRandomColor() : prevColor
+      );
+    }, speed);
 
     return () => clearInterval(interval);
-  }, [width, height, isPlaying, currentColor, speed]);
+  }, [isPlaying, width, height, currentColor, speed]);
 
   if (!grid.length) return null;
 
+  // Calculate block size to fill the screen
+  const blockWidth = Math.floor(window.innerWidth / width);
+  const blockHeight = Math.floor(window.innerHeight / height);
+  const blockSize = Math.min(blockWidth, blockHeight);
+
   return (
-    <div 
-      className="grid bg-black" 
-      style={{ 
+    <div
+      style={{
         display: 'grid',
-        gridTemplateColumns: `repeat(${width}, 1fr)`,
-        gap: '1px',
-        padding: '1px',
-        background: 'rgba(128, 128, 128, 0.2)',
+        gridTemplateColumns: `repeat(${width}, ${blockSize}px)`,
+        gridTemplateRows: `repeat(${height}, ${blockSize}px)`,     
+        justifyContent: 'center',                                                                                                                                                     
+        alignItems: 'center',                                                                                                                                                                                      
+        gap: '0', // Remove gaps between blocks
+        width: '100vw',
+        height: '100vh',
       }}
     >
       {grid.flat().map((cell, index) => (
-        <div 
-          key={index} 
-          className="aspect-square bg-black"
+        <div
+          key={index}
+          style={{
+            width: blockSize,
+            height: blockSize,
+            backgroundColor: cell ? cell.color : 'transparent', // No background for empty cells
+            border: '1px solid #3a3a3a', // Borders only for visibility
+            opacity: cell ? cell.opacity : 2,
+          }}
         >
           {cell && <RainDrop color={cell.color} opacity={cell.opacity} />}
         </div>
