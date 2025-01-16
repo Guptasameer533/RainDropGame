@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import RainDrop from './RainDrop';
+import './RainGrid.css'; // Import the CSS file
 
 interface RainGridProps {
   width: number;
@@ -51,7 +52,7 @@ const RainGrid: React.FC<RainGridProps> = ({ width, height, isPlaying, speed }) 
 
         // Add new drops at the top
         for (let x = 0; x < width; x++) {
-          if (Math.random() < 0.05) {
+          if (Math.random() < 0.08) {
             for (let i = 0; i < blockLength; i++) {
               if (i < height) {
                 newGrid[i][x] = {
@@ -83,25 +84,28 @@ const RainGrid: React.FC<RainGridProps> = ({ width, height, isPlaying, speed }) 
 
   return (
     <div
-      style={{
-        display: 'grid',
-        gridTemplateColumns: `repeat(${width}, ${blockSize}px)`,
-        gridTemplateRows: `repeat(${height}, ${blockSize}px)`,     
-        justifyContent: 'center',                                                                                                                                                     
-        alignItems: 'center',                                                                                                                                                                                      
-        gap: '0', // Remove gaps between blocks
-        width: '100vw',
-        height: '100vh',
-      }}
+    style={{
+      display: 'grid',
+      gridTemplateColumns: `repeat(${width}, ${blockSize}px)`,
+      gridTemplateRows: `repeat(${height}, ${blockSize}px)`,     
+      justifyContent: 'center',                                                                                                                                                     
+      alignItems: 'center',                                                                                                                                                                                      
+      gap: '0', // Remove gaps between blocks
+      width: '100vw',
+      height: '100vh',
+      border: '10px solid black', // Add thick outer border
+      boxSizing: 'border-box', // Ensure border is included in the element's total width and height
+    }}
     >
       {grid.flat().map((cell, index) => (
         <div
           key={index}
+          className="rain-block" // Apply the CSS class
           style={{
             width: blockSize,
             height: blockSize,
             backgroundColor: cell ? cell.color : 'transparent', // No background for empty cells
-            border: '1px solid #3a3a3a', // Borders only for visibility
+            border: '2.5px solid #292828', // Borders only for visibility
             opacity: cell ? cell.opacity : 2,
           }}
         >
