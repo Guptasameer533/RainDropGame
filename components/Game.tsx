@@ -5,7 +5,7 @@ import RainGrid from './RainGrid';
 const Game: React.FC = () => {
   return (
     <div className="w-screen h-screen flex items-center justify-center bg-black">
-      <RainGrid width={20} height={15} isPlaying={true} speed={175} />
+      <RainGrid width={20} height={15} isPlaying={true} speed={185} />
     </div>
   );
 };
