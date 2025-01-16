@@ -70,7 +70,7 @@ const RainGrid: React.FC<RainGridProps> = ({ width, height, isPlaying, speed }) 
       setCurrentColor((prevColor) =>
         Math.random() < 0.1 ? getRandomColor() : prevColor
       );
-    }, speed);
+    }, speed / 2); // Increase speed by halving the interval duration
 
     return () => clearInterval(interval);
   }, [isPlaying, width, height, currentColor, speed]);
@@ -84,18 +84,18 @@ const RainGrid: React.FC<RainGridProps> = ({ width, height, isPlaying, speed }) 
 
   return (
     <div
-    style={{
-      display: 'grid',
-      gridTemplateColumns: `repeat(${width}, ${blockSize}px)`,
-      gridTemplateRows: `repeat(${height}, ${blockSize}px)`,     
-      justifyContent: 'center',                                                                                                                                                     
-      alignItems: 'center',                                                                                                                                                                                      
-      gap: '0', // Remove gaps between blocks
-      width: '100vw',
-      height: '100vh',
-      border: '10px solid black', // Add thick outer border
-      boxSizing: 'border-box', // Ensure border is included in the element's total width and height
-    }}
+      style={{
+        display: 'grid',
+        gridTemplateColumns: `repeat(${width}, ${blockSize}px)`,
+        gridTemplateRows: `repeat(${height}, ${blockSize}px)`,
+        justifyContent: 'center',
+        alignItems: 'center',
+        gap: '0', // Remove gaps between blocks
+        width: '100vw',
+        height: '100vh',
+        border: '10px solid black', // Add thick outer border
+        boxSizing: 'border-box', // Ensure border is included in the element's total width and height
+      }}
     >
       {grid.flat().map((cell, index) => (
         <div
